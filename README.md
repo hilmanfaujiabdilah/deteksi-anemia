@@ -123,16 +123,23 @@ Setelah memahami karakteristik data, tahap data preparation dilakukan untuk memb
    - Kemudian, transformasi menggunakan scaler yang telah di-fit tersebut diterapkan pada `X_train` dan juga pada `X_test`. Sehingga fitur-fitur numerik yang ditentukan dalam X_train dan X_test dapat memiliki skala yang seragam.
 
 ## Modeling
-Algoritma yang digunakan dalam proyek ini diantaranya
+Pada tahap ini, dikembangkan tiga model machine learning untuk prediksi anemia, yaitu Logistic Regression, Gradient Boosting Classifier, dan Support Vector Machine.
 1. Logistic Regression (LR)
-   - Kelebihan: Sederhana, cepat, interpretatif.
-   - Kekurangan: Lemah menangani non-linearitas.
+   - Logistic Regression adalah model linear yang memprediksi probabilitas kelas biner menggunakan fungsi sigmoid. Model ini menentukan batas keputusan linear berdasarkan kombinasi fitur input.
+   - Model ini menggunakan parameter default dari scikit-learn, yang umumnya mencakup regularisasi L2 (`penalty='l2'`) dan solver seperti 'lbfgs'
+   - Kelebihan: Sederhana, cepat dilatih, mudah diinterpretasikan.
+   - Kekurangan: Kurang efektif untuk hubungan non-linear, rentan underfitting pada data kompleks.
 2. Gradient Boosting Classifier (GBC)
-   - Kelebihan: Akurat, tangguh terhadap noise.
-   - Kekurangan: Butuh tuning, komputasi berat.
+   - Gradient Boosting adalah teknik ensemble yang membangun model (biasanya decision tree) secara sekuensial. Setiap model baru berfokus pada perbaikan kesalahan yang dibuat oleh model-model sebelumnya, menggunakan optimasi gradien.
+   - Model ini menggunakan parameter default dari scikit-learn
+   - Kelebihan: Akurasi tinggi, dapat menangani hubungan kompleks.
+   - Kekurangan: Membutuhkan tuning, komputasi bisa lebih berat, kurang interpretatif.
 3. Support Vector Machine (SVM)
-   - Kelebihan: Baik untuk data berdimensi tinggi.
-   - Kekurangan: Sensitif terhadap parameter, lambat jika data besar.
+   - SVM mencari hyperplane optimal yang memaksimalkan margin (jarak) antara kelas data. Untuk data non-linear, SVM menggunakan fungsi kernel (seperti RBF) untuk memetakan data ke ruang dimensi yang lebih tinggi agar pemisahan linear dapat dilakukan.
+   - Parameter yang digunakan adalah 'C=1.0' yaitu parameter regularisasi yang mengontrol trade-off antara margin dan kesalahan klasifikasi. gamma='scale' yaitu koefisien kernel (untuk RBF) yang menentukan jangkauan pengaruh satu sampel pelatihan. Kemudian diasumsikan menggunakan `kernel='rbf'` (default).
+   - Kelebihan: Efektif di ruang dimensi tinggi, hemat memori (menggunakan support vectors).
+   - Kekurangan: Sensitif terhadap parameter, bisa lambat pada data besar, interpretasi lebih sulit dengan kernel non-linear.
+
  
 Berikut adalah parameter yang digunakan dalam ketiga model
 |  Model | Parameter | 
@@ -200,11 +207,6 @@ Berikut adalah hasil dari confusion matrix:
 
 ### Kesimpulan evaluasi
 Model Gradient Boosting menunjukkan performa terbaik dan paling konsisten di semua metrik, dengan accuracy, precision, recall, dan F1-score = 1.000 pada data uji. Konsistensi performa antara train dan test tanpa penurunan signifikan menandakan minimnya overfitting, sehingga model ini direkomendasikan sebagai solusi utama untuk prediksi anemia pediatrik.
-
-**Catatan**: 
-
-Visualisasi distribusi data, heatmap korelasi, dan confusion matrix tersedia pada notebook untuk mendukung interpretasi data dan performa model.
-
 
 **Referensi:**
 
