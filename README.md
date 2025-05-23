@@ -29,64 +29,92 @@ berikut adalah problem statement dari proyek ini:
 ### Goals
 
 Berdasarkan masalah di atas, berikut adalah tujuan dari adanya proyek ini:
-- Meminimalkan Waktu Deteksi Dini Anemia
-  Mengembangkan model prediksi berbasis parameter hematologis (Hb, RBC, PCV, MCV, MCH, MCHC) sehingga dapat mendeteksi risiko anemia pada anak lebih awal, sebelum hasil laboratorium lengkap tersedia, dengan akurasi minimal 90%.
-- Menghadirkan Solusi Ringkas untuk Klinik Primer
-  Merancang prototipe aplikasi atau dashboard yang mudah digunakan, yang hanya memerlukan input parameter hematologis dasar untuk memprediksi status anemia. Solusi ini harus ramah sumber daya (low‑compute) agar dapat diadopsi di klinik dengan keterbatasan infrastruktur.
-  
+- Mengembangkan Model Prediksi Anemia yang Akurat
+  Membangun sebuah model klasifikasi machine learning yang mampu memprediksi status anemia pada anak (anemia atau non-anemia) berdasarkan indikator hematologis (Hb, RBC, MCH, MCHC, dan Age, serta Gender) dengan target akurasi minimal 90% pada data uji.
+- Mengidentifikasi Algoritma Klasifikasi Terbaik
+  Melakukan evaluasi komparatif terhadap beberapa algoritma machine learning (seperti Logistic Regression, Gradient Boosting, dan SVM) untuk menentukan model dengan performa terbaik dalam hal akurasi, presisi, recall, dan F1-score, khususnya dengan sensitivitas tinggi (recall) untuk mendeteksi kasus anemia.
+- Menghasilkan Model yang Dapat Diimplementasikan
+  Mengembangkan model prediktif yang tidak hanya akurat tetapi juga cukup efisien untuk potensi implementasi pada sistem atau aplikasi sederhana, guna mendukung deteksi dini anemia di fasilitas dengan sumber daya terbatas.
 
 ### Solution Statement:
-- Pengujian Multi-Algoritma dengan Evaluasi Terukur
-  Membangun dan membandingkan tiga model prediksi Logistic Regression (LR), Gradient Boosting Classifier (Boosting), dan Support Vector Machine (SVM, kernel RBF). Pada data pelatihan dan uji untuk mendapatkan gambaran awal kinerja masing‑masing model. Ukur dan bandingkan `accuracy_train` dan `accuracy_test` sebagai metrik pertama, serta analisis confusion matrix untuk setiap model agar dapat menilai kesalahan klasifikasi pada kelas anemia vs non‑anemia.
-- Selain accuracy, menghitung nilai precision, recall, dan F1‑score pada data latih dan data uji untuk setiap model ter‑tuning. Hal ini memastikan model tidak hanya akurat secara keseluruhan, tetapi juga sensitif dalam mendeteksi kasus anemia (high recall) dan spesifik pada non‑anemia (high precision).
+Untuk mencapai tujuan-tujuan tersebut, solusi yang diajukan adalah pengembangan sistem prediksi anemia melalui tahapan berikut:
+- Pengembangan dan Evaluasi Model
+  - Akan dibangun dan dilatih tiga model klasifikasi utama: Logistic Regression (LR), Gradient Boosting Classifier (Boosting), dan Support Vector Machine (SVM) menggunakan data hematologis yang telah diproses.
+  - Kinerja setiap model akan dievaluasi secara komprehensif pada data pelatihan dan data pengujian menggunakan metrik standar: akurasi, presisi, recall, dan F1-score. Analisis confusion matrix juga akan dilakukan untuk memahami secara detail bagaimana masing-masing model mengklasifikasikan kasus anemia dan non-anemia, termasuk identifikasi jenis kesalahan yang dibuat.
+- Pemilihan Model Optimal
+   - Model terbaik akan dipilih berdasarkan perbandingan skor metrik evaluasi, dengan penekanan khusus pada test_accuracy yang tinggi dan skor recall yang optimal untuk meminimalkan risiko kasus anemia yang tidak terdeteksi. Pertimbangan juga akan diberikan pada keseimbangan antara presisi dan recall (F1-score).
+   - Model terpilih diharapkan dapat memberikan prediksi status anemia secara efektif, menjadi dasar untuk solusi deteksi dini yang praktis.
 
 ## Data Understanding
 
-Dataset ini berisi informasi klinis pasien yang digunakan untuk mengklasifikasikan status anemia. Data dikumpulkan dari pemeriksaan laboratorium dan mencakup parameter hematologi utama.
+Tahap ini bertujuan untuk memahami karakteristik dataset yang digunakan dalam proyek ini sebelum dilakukan pemrosesan lebih lanjut. Pemahaman ini meliputi struktur data, konten, kualitas awal, serta analisis eksploratif untuk mendapatkan wawasan awal.
 
-- **Jumlah Sampel**: 1000 record data
-- **Jumlah Fitur** : 8 (7 fitur prediktor + 1 target)
-- **Sumber Data**   : [Link Dataset](https://data.mendeley.com/datasets/y7v7ff3wpj/1)
+### Sumber Data
+Dataset yang digunakan dalam proyek ini adalah "Anemia Prediction Dataset" yang bersumber dari Mendeley Data. Dataset ini berisi data klinis dan parameter hematologis pasien yang relevan untuk prediksi anemia.
+Tautan sumber data : [Link](https://data.mendeley.com/datasets/y7v7ff3wpj/1)
 
-### Variabel-variabel pada Anemia Dataset adalah sebagai berikut:
-1. **Age**            : Usia pasien dalam tahun (numerik, rentang 18-96)
-2. **Gender**         : Jenis kelamin pasien (kategorikal: "Male" atau "Female")
-3. **Hb**             : Hemoglobin (g/dL), indikator utama jumlah hemoglobin dalam darah
-4. **RBC**            : Red Blood Cell Count (×10^6 sel/µL), jumlah sel darah merah
-5. **MCV**            : Mean Corpuscular Volume (fL), rata-rata volume sel darah merah
-6. **MCH**            : Mean Corpuscular Hemoglobin (pg), rata-rata berat hemoglobin per sel
-7. **MCHC**           : Mean Corpuscular Hemoglobin Concentration (g/dL), konsentrasi hemoglobin per volume sel
-8. **PCV**            : Packed Cell Volume (%), proporsi volume darah yang ditempati sel darah merah
-9. **Decision_Class** : Label target (0 = Non-anemia, 1 = Anemia)
+### Deskripsi Data
+- Jumlah Baris dan Kolom: Dataset awal terdiri dari 1000 baris (sampel) dan 9 kolom (fitur). Kolom-kolom ini mencakup 8 fitur prediktor dan 1 fitur target ('Decision_Class').
+- Uraian Seluruh Fitur pada Data:
+  - Gender: Jenis kelamin pasien (kategorikal: nilai asli 'm' untuk Male, 'f' untuk Female).
+  - Age: Usia pasien dalam tahun (numerik).
+  - Hb: Kadar Hemoglobin dalam darah (g/dL), indikator utama anemia (numerik).
+  - RBC: Jumlah Sel Darah Merah (Red Blood Cell Count) (×10^6 sel/µL) (numerik).
+  - PCV: Packed Cell Volume atau Hematokrit (%), proporsi volume darah yang ditempati sel darah merah (numerik).
+  - MCV: Mean Corpuscular Volume (fL), volume rata-rata sel darah merah (numerik).
+  - MCH: Mean Corpuscular Hemoglobin (pg), berat rata-rata hemoglobin per sel darah merah (numerik).
+  - MCHC: Mean Corpuscular Hemoglobin Concentration (g/dL), konsentrasi hemoglobin rata-rata per unit volume sel darah merah (numerik).
+  - Decision_Class: Fitur target yang mengindikasikan status anemia pasien (biner: 0 = Non-Anemia, 1 = Anemia).
 
-### Proses Exploratory Data Analysis:
+### Kondisi Data Awal
 
-Terdapat beberapa tahap yang dilakuakn dalam eksploratory data analysis diantaranya:
+Pemeriksaan awal terhadap kualitas data dilakukan untuk mengidentifikasi potensi masalah:
+1. Missing Values: Pemeriksaan menggunakan df.info() menunjukkan bahwa tidak terdapat nilai yang hilang (missing values) pada semua kolom dalam dataset. Setiap kolom memiliki 1000 entri non-null.
+2. Data Duplikat: Pemeriksaan menggunakan df.duplicated().sum() menunjukkan adanya data duplikat dalam dataset sebanyak 28 baris.
+3. Outlier (Observasi Awal):
+   ![outlier](https://github.com/user-attachments/assets/62c35be7-5379-425b-85a2-68928e39c6b7)
+   Visualisasi awal menggunakan boxplot untuk setiap fitur numerik mengindikasikan adanya beberapa titik data yang berpotensi menjadi outlier. Fitur seperti 'Age', 'Hb', 'RBC', 'PCV', 'MCV', 'MCH', dan 'MCHC' menunjukkan adanya nilai-nilai yang terletak jauh dari sebagian besar distribusi datanya. Penanganan lebih lanjut terhadap outlier ini akan dibahas pada tahap Data Preparation.
 
-1. Mengecek tipe data dan statistik deskriptif
-   Dengan menggunakan fungsi `df.info()` untuk mengecek tipe data tiap kolom dan jumlah entri non-null. Ini berguna untuk mengidentifikasi apakah ada data kosong atau kolom bertipe data yang tidak sesuai.
-2. Mengecek analisis deskriptif
-   Menggunakan `df.describe(include='all')` untuk mendapatkan nilai-nilai statistik seperti rata-rata (mean), median, nilai minimum dan maksimum, serta kuartil. Statistik ini membantu memahami skala data, sebaran nilai, dan mendeteksi ketidakwajaran (anomali awal).
-3. Analysis Outliers
-   Menggunakan boxplot per fitur numerik untuk mengidentifikasi nilai outlier. Menghitung IQR (Q3–Q1) dan menghapus baris yang berada di luar [Q1–1.5×IQR, Q3+1.5×IQR] pada kolom numerik. Hal ini dilakukan karena nilai ekstream dapat mempengaruhi rata-rata dan variansi, serta mengarahkan model untuk overfit pada data unik.
-3. Melakukan EDA Univariate Analysis
-   - Distribusi numerik: Menggunakan histogram untuk semua fitur numerik seperti Age, Hb, RBC, dll., guna memahami distribusi dan skewness. Mayoritas fitur menunjukkan distribusi normal atau hampir normal.
-   - Distribusi kategorikal: Gender ditampilkan dalam bentuk bar plot untuk melihat proporsi laki-laki dan perempuan. Persentase distribusi gender juga dihitung.
-4. Melakukan EDA Multivariate Analysis
-   - Pairplot: Digunakan untuk mengeksplorasi relasi antar fitur numerik dan potensi klasterisasi antar kelas target (anemia vs non-anemia).
-   - Heatmap korelasi: Menggunakan Pearson correlation untuk mengukur kekuatan hubungan linier antar fitur. Teridentifikasi bahwa PCV dan MCV sangat berkorelasi dengan fitur lain, sehingga dihapus untuk mengurangi multikolinearitas.
-
+### Exploratory Data Analysis (EDA)
+Analisis data eksploratif dilakukan untuk lebih memahami karakteristik dan pola dalam data:
+1. Statistik Deskriptif
+   ![image](https://github.com/user-attachments/assets/3938f955-155f-4b76-8836-21858b4b20bc)
+   Menggunakan `df.describe()` untuk mendapatkan ringkasan statistik (seperti mean, median, standar deviasi, min, max, kuartil) untuk fitur numerik. memberikan gambaran mengenai sebaran dan tendensi sentral masing-masing fitur. Sebagai contoh, rentang usia pasien teridentifikasi antara 18 hingga 96 tahun.
+2. Analisis Univariat
+   - Distribusi Fitur Numerik
+     ![univar num](https://github.com/user-attachments/assets/88a98385-8fca-428a-9945-08ba8513279d)
+     Observasi menunjukkan bahwa sebagian besar fitur hematologis seperti 'RBC', 'PCV', 'MCV', dan 'MCHC' memiliki distribusi yang mendekati normal, meskipun beberapa menunjukkan sedikit kemiringan (skewness). Fitur 'Age' menunjukkan distribusi yang lebih tersebar, sementara 'Hb' tampak sedikit miring ke kiri.
+   - Distribusi Fitur Kategorikal
+     ![univar gender](https://github.com/user-attachments/assets/c38f4c5f-3d27-495e-8f2a-829c9eb7c4ee)
+     Observasi menunjukkan bahwa sebagian besar fitur hematologis seperti 'RBC', 'PCV', 'MCV', dan 'MCHC' memiliki distribusi yang mendekati normal, meskipun beberapa menunjukkan sedikit kemiringan (skewness). Fitur 'Age' menunjukkan distribusi yang lebih tersebar, sementara 'Hb' tampak sedikit miring ke kiri.
+4. Analisis Multivariat
+   - Pairplot
+     ![multi pair](https://github.com/user-attachments/assets/73b7a86d-f2a5-4b27-9eb7-c898091204d8)
+     `sns.pairplot(df, diag_kind='kde')` digunakan untuk memvisualisasikan hubungan antar pasangan fitur numerik dan distribusi individual setiap fitur. Dari scatter plot, teridentifikasi adanya korelasi positif yang kuat antara beberapa pasang fitur hematologis, misalnya antara 'Hb' dengan 'RBC' dan 'PCV', serta antara 'RBC' dan 'PCV'. Korelasi yang sangat kuat juga terlihat antara 'MCV' dan 'MCH'.
+   - Heatmap Korelasi
+     ![image](https://github.com/user-attachments/assets/baaa6b90-7987-4abd-bb7f-e1d6b62b7a3e)
+      Hasil heatmap mengonfirmasi korelasi tinggi (nilai mendekati +1) antara 'PCV' dan 'Hb', 'PCV' dan 'RBC', serta 'MCV' dan 'MCH'. Observasi ini menjadi dasar pertimbangan untuk tahap feature selection guna mengurangi multikolinearitas.
+   
 ## Data Preparation
-Dalam tahapan data preparation, langkah-langkah berikut dilakukan secara berurutan:
+Setelah memahami karakteristik data, tahap data preparation dilakukan untuk membersihkan, mentransformasi, dan menyiapkan data agar sesuai untuk proses pemodelan machine learning. Langkah-langkah yang dilakukan secara berurutan adalah sebagai berikut:
 
-1. Encoding Kategorikal
-   Pada langkah ini dilakukan untuk mengubah Gender menjadi format numerik (0/1) dengan LabelEncoder. Hal tersebut dilakukan karena algoritma ML memerlukan input numerik agar dapat menghitung jarak (SVM) atau pembagian (tree-based).
+1. Penanganan Outlier
+   - Berdasarkan identifikasi outlier pada tahap EDA menggunakan boxplot, dilakukan penanganan outlier dengan metode IQR (Interquartile Range) pada fitur-fitur numerik.
+   - Penghapusan outlier bertujuan untuk meningkatkan robustisitas model dan mencegah pengaruh yang tidak proporsional dari nilai-nilai ekstrem pada hasil analisis dan kinerja model.
+   - Setelah proses ini, jumlah sampel dalam dataset berkurang dari 1000 menjadi 827 sampel.
 2. Feature Selection
-   Proses ini menghapus PCV dan MCV karena korelasi tinggi (>0.9) dengan Hb dan RBC. alasannya karena fitur yang sangat berkorelasi menyebabkan multikollinearitas, mengurangi stabilitas koefisien pada model linier dan ensembling.
-3. Train-Test Split
-   pada tahap ini memisahkan data dengan rasio 80% training dan 20% testing (random_state=42). rasio ini memberikan cukup data untuk melatih model sekaligus menyisakan cukup sampel yang representatif untuk mengevaluasi performa. Rasio 80:20 menjaga keseimbangan antara kebutuhan data belajar dan kebutuhan validasi model secara generalisasi.
-4. Feature Scaling
-   StandardScaler dilakukan pada kolom Age, Hb, RBC, MCH, MCHC (yang akan merubah data sehingga memiliki skala mean=0 dan std=1). Hal ini dilakukan untuk menghindari dominasi fitur berskala besar pada algoritma yang peka skala (Logistic Regression, SVM).
+   - Berdasarkan analisis korelasi pada tahap EDA yang menunjukkan multikolinearitas tinggi, fitur 'MCV' dan 'PCV' dihapus dari dataset.
+   - Kedua fitur ini memiliki korelasi yang sangat kuat dengan fitur hematologis lainnya (seperti 'MCV' dengan 'MCH', dan 'PCV' dengan 'Hb' dan 'RBC'). Penghapusan ini bertujuan untuk mengurangi redundansi informasi, menyederhanakan model, dan meningkatkan stabilitasnya.
+   - Dataset kini memiliki fitur prediktor: 'Gender', 'Age', 'Hb', 'RBC', 'MCH', dan 'MCHC'.
+3. Encoding Variabel Kategorikal
+   - Fitur 'Gender', yang merupakan variabel kategorikal, diubah menjadi representasi numerik menggunakan `LabelEncoder` dari scikit-learn. Dimana, 'f' di encode menjadi 0 dan 'm' menjadi 1
+4. Pembagian Data (Train-Test Split)
+   - Dataset dibagi menjadi fitur independen (X) dan fitur target (y, yaitu 'Decision_Class').
+   - Data dibagi lagi menjadi set pelatihan (`X_train`, `y_train`) dan set pengujian (`X_test`, `y_test`) dengan rasio 80% untuk data pelatihan dan 20% untuk data pengujian. Parameter `random_state=42` digunakan untuk memastikan reproduktifitas pembagian.
+   - Dari 827 sampel (setelah penanganan outlier), 661 sampel dialokasikan untuk data pelatihan dan 166 sampel untuk data pengujian.
+5. Penskalaan Fitur (Feature Scaling)
+   - Standarisasi diterapkan pada fitur-fitur numerik dalam set pelatihan (`X_train`), yaitu 'Age', 'Hb', 'RBC', 'MCH', dan 'MCHC', menggunakan `StandardScaler` dari scikit-learn.
+   - Kemudian, transformasi menggunakan scaler yang telah di-fit tersebut diterapkan pada `X_train` dan juga pada `X_test`. Sehingga fitur-fitur numerik yang ditentukan dalam X_train dan X_test dapat memiliki skala yang seragam.
 
 ## Modeling
 Algoritma yang digunakan dalam proyek ini diantaranya
