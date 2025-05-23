@@ -140,20 +140,9 @@ Pada tahap ini, dikembangkan tiga model machine learning untuk prediksi anemia, 
    - Kelebihan: Efektif di ruang dimensi tinggi, hemat memori (menggunakan support vectors).
    - Kekurangan: Sensitif terhadap parameter, bisa lambat pada data besar, interpretasi lebih sulit dengan kernel non-linear.
 
- 
-Berikut adalah parameter yang digunakan dalam ketiga model
-|  Model | Parameter | 
-| ------ | ------------- |
-| LR     |    default    |
-|  GBC   |    default    |
-| SVM    | C=1.0, gamma='scale' |
-
-
-Berdasarkan evaluasi terhadap tiga algoritma yang digunakan (Logistic Regression, Gradient Boosting, dan SVM), model terbaik yang dipilih adalah Gradient Boosting Classifier. Hal ini didasarkan pada hasil evaluasi pada data uji, di mana Gradient Boosting mencapai skor sempurna (100%) untuk semua metrik utama, yaitu accuracy, precision, recall, dan F1-score. Tidak hanya unggul dalam performa prediksi, model ini juga menunjukkan generalisasi yang sangat baik tanpa indikasi overfitting berlebih, sebagaimana terlihat dari konsistensi performa antara data latih dan data uji. Oleh karena itu, Gradient Boosting dipilih sebagai solusi utama dalam mendeteksi anemia pada dataset ini karena memberikan hasil yang paling andal dan stabil dibandingkan model lainnya.
-
 ## Evaluation
 
-Pada tahap evaluasi, metrik utama yang digunakan adalah accuracy, precision, recall, dan F1-score. Keempat metrik ini dirumuskan sebagai:
+Evaluasi model merupakan tahap krusial untuk mengukur sejauh mana model yang dikembangkan mampu menjawab permasalahan dan mencapai tujuan proyek. Pada tahap ini, metrik utama yang digunakan adalah accuracy, precision, recall, dan F1-score.
 
 - **Accuracy:** Proporsi prediksi yang benar terhadap total sampel.
 
@@ -182,19 +171,20 @@ Selain itu, confusion matrix digunakan untuk meninjau distribusi true positive (
 
 ### Hasil evaluasi
 
-| Model        | Train Acc | Test Acc | Train Prec | Test Prec | Train Rec | Test Rec | Train F1 | Test F1 |
-| ------------ | --------- | -------- | ---------- | --------- | --------- | -------- | -------- | ------- |
-| **LR**       | 0.994     | 0.982    | 0.998      | 1.000     | 0.993     | 0.974    | 0.995    | 0.987   |
-| **Boosting** | 1.000     | 1.000    | 1.000      | 1.000     | 1.000     | 1.000    | 1.000    | 1.000   |
-| **SVM**      | 0.988     | 0.965    | 0.995      | 0.991     | 0.986     | 0.957    | 0.991    | 0.974   |
+![image](https://github.com/user-attachments/assets/e6eb869e-4d12-47d8-bcfb-638834db0ccb)
 
-- Accuracy: Boosting sempurna (100%) pada data uji, diikuti LR 98.2% dan SVM 96.5%.
-- Precision: Semua model sangat tepat; Boosting 100%.
-- Recall: Boosting mendeteksi semua kasus anemia (100%), sedangkan LR dan SVM masing‑masing 97.4% dan 95.7%.
-- F1-score: Boosting memimpin dengan 1.000, menunjukkan keseimbangan sempurna antara precision dan recall.
+Ringkasan Performa pada Data Uji:
+- Akurasi: Model Gradient Boosting mencapai akurasi sempurna (1.000), diikuti oleh LR (0.982) dan SVM (0.970).
+- Presisi: Semua model menunjukkan presisi yang sangat tinggi. LR dan Gradient Boosting mencapai presisi sempurna (1.000), sementara SVM mencapai 0.981.
+- Recall: Gradient Boosting kembali unggul dengan recall sempurna (1.000), yang berarti berhasil mendeteksi semua kasus anemia aktual. LR mencapai recall 0.971, dan SVM 0.971.
+- F1-score: Gradient Boosting memimpin dengan skor 1.000, menunjukkan keseimbangan sempurna antara presisi dan recall. LR dan SVM masing-masing mencatatkan F1-score 0.985 dan 0.976.
+Secara keseluruhan, model Gradient Boosting Classifier (Boosting) menunjukkan superioritas di semua metrik evaluasi pada data uji.
 
 ### Analisis confusion matrix
 Berikut adalah hasil dari confusion matrix:
+
+![conf m](https://github.com/user-attachments/assets/96b06795-eff7-4090-bd3b-32d85d751587)
+
 - Logistic Regression:
   - TN = 55, FP = 0, FN = 3, TP = 113
   - Terdapat 3 kasus anemia yang gagal terdeteksi.
@@ -205,8 +195,37 @@ Berikut adalah hasil dari confusion matrix:
   - TN = 54, FP = 1, FN = 5, TP = 111
   - Terdapat 1 FP dan 5 FN.
 
+### Hasil Evaluasi dan Dampaknya terhadap Tujuan Proyek
+Evaluasi kinerja model tidak hanya berhenti pada angka, tetapi juga bagaimana hasil ini menjawab kebutuhan dan tujuan awal proyek.
+
+1. Pencapaian Tujuan (Goals) Proyek
+   - Tujuan 1: Mengembangkan Model Prediksi Anemia yang Akurat (Akurasi min 90%)
+     Tercapai. Ketiga model yang dikembangkan berhasil melampaui target akurasi minimal 90% pada data uji. Model Gradient Boosting bahkan mencapai akurasi 100%, Logistic Regression 98.2%, dan SVM 96.5%. Ini menunjukkan bahwa model prediksi yang dikembangkan sangat akurat dalam mengklasifikasikan status anemia.
+   - Tujuan 2: Mengidentifikasi Algoritma Klasifikasi Terbaik
+     Tercapai. Melalui evaluasi komparatif, Gradient Boosting Classifier berhasil diidentifikasi sebagai algoritma terbaik. Model ini unggul secara signifikan di semua metrik evaluasi (akurasi, presisi, recall, dan F1-score) pada data uji, dengan skor sempurna (1.000). Tingginya skor recall (1.000) sangat krusial, menandakan tidak ada kasus anemia yang terlewat.
+   - Tujuan 3: Menghasilkan Model yang Dapat Diimplementasikan
+     Berpotensi Tercapai. Model Gradient Boosting, meskipun mungkin memerlukan sumber daya komputasi yang lebih besar saat pelatihan dibandingkan LR, umumnya memiliki waktu prediksi yang cepat setelah model dilatih. Kinerja prediksinya yang superior menjadikannya kandidat kuat untuk implementasi. Efisiensi implementasi akhir akan bergantung pada platform target, namun akurasi dan reliabilitasnya yang tinggi sangat mendukung potensinya untuk digunakan di lingkungan klinis, termasuk yang memiliki sumber daya terbatas, jika infrastruktur inferensi dapat dioptimalkan.
+   
+2. Jawaban Terhadap Problem Statements
+   - Problem Statement 1: Tingginya Prevalensi Anemia Pediatrik dan Keterlambatan Deteksi
+     Model prediksi yang dikembangkan, khususnya Gradient Boosting dengan akurasi dan recall 100%, secara langsung menjawab masalah keterlambatan deteksi. Dengan menggunakan parameter hematologis dasar, model ini berpotensi memungkinkan skrining awal yang cepat dan akurat, bahkan sebelum hasil pemeriksaan laboratorium lengkap (CBC) tersedia atau jika CBC tidak dapat segera dilakukan. Ini membuka jalan untuk intervensi yang lebih dini.
+   - Problem Statement 2: Keterbatasan Akses dan Sumber Daya Laboratorium di Klinik Primer
+     Model ini bergantung pada beberapa parameter hematologis yang mungkin dapat diperoleh dari alat pemeriksaan yang lebih sederhana atau sebagai bagian dari pemeriksaan darah parsial, dibandingkan dengan kebutuhan CBC lengkap. Meskipun pengumpulan parameter input tetap memerlukan fasilitas laboratorium dasar, model ini dapat membantu tenaga kesehatan di klinik primer membuat penilaian risiko anemia dengan lebih percaya diri dan cepat, mengoptimalkan penggunaan sumber daya yang terbatas, dan memprioritaskan kasus yang memerlukan rujukan atau pemeriksaan lebih lanjut.
+
+3. Dampak Implementasi Solusi yang Direncanakan (Solution Statements)
+   - Solusi 1: Pengembangan dan Evaluasi Model (LR, GBC, SVM dengan metrik komprehensif)
+     Berhasil Diimplementasikan dan Berdampak Positif. Pendekatan untuk membangun, melatih, dan mengevaluasi ketiga model (LR, GBC, SVM) menggunakan serangkaian metrik yang komprehensif (akurasi, presisi, recall, F1-score, dan confusion matrix) telah berhasil dilaksanakan. Dampaknya adalah diperolehnya pemahaman yang mendalam tentang kekuatan dan kelemahan masing-masing model. Penggunaan metrik yang beragam, terutama recall, memastikan bahwa aspek kritis dari deteksi penyakit (meminimalkan kasus terlewat) menjadi pertimbangan utama.
+   - Solusi 2: Pemilihan Model Optimal (berdasarkan akurasi uji dan recall tinggi)
+     Berhasil Diimplementasikan dan Berdampak Signifikan. Proses pemilihan model optimal berhasil mengidentifikasi Gradient Boosting sebagai model superior. Keputusan ini didasarkan pada kriteria yang ditetapkan, yaitu performa terbaik pada data uji dengan penekanan pada akurasi dan recall. Dampaknya adalah terpilihnya model yang paling andal dan paling sesuai dengan kebutuhan domain masalah, yaitu model yang tidak hanya akurat secara keseluruhan tetapi juga sangat sensitif dalam mendeteksi kasus anemia (recall 100% pada data uji).
+
+4. Dampak Model terhadap Pemahaman Bisnis (Business Understanding)
+   Pengembangan model machine learning dalam proyek ini, khususnya dengan performa luar biasa dari model Gradient Boosting, memberikan kontribusi signifikan terhadap pemahaman dan solusi masalah anemia pediatrik.
+   - Validasi Potensi Deteksi Dini. Hasil ini secara kuat memvalidasi bahwa pendekatan berbasis machine learning dengan menggunakan indikator hematologis dasar memiliki potensi besar untuk deteksi dini anemia pada anak. Ini menguatkan argumen bahwa ketergantungan pada CBC lengkap sebagai satu-satunya metode skrining dapat dikurangi atau didukung oleh alat prediksi seperti ini.
+   - Potensi Pengurangan Dampak Negatif Anemia. Dengan deteksi dini yang difasilitasi oleh model ini, intervensi medis dapat dilakukan lebih cepat, sehingga berpotensi mengurangi dampak negatif jangka panjang dari anemia pada perkembangan fisik dan kognitif anak, yang pada akhirnya dapat meringankan beban ekonomi dan sosial.
+   - Dasar untuk Pengembangan Lebih Lanjut. Keberhasilan model ini menjadi dasar yang kuat untuk pengembangan lebih lanjut, seperti integrasi ke dalam sistem informasi kesehatan, pengembangan aplikasi mobile health (mHealth) untuk tenaga kesehatan, atau penelitian lebih lanjut untuk validasi pada populasi yang lebih luas dan beragam.
+
 ### Kesimpulan evaluasi
-Model Gradient Boosting menunjukkan performa terbaik dan paling konsisten di semua metrik, dengan accuracy, precision, recall, dan F1-score = 1.000 pada data uji. Konsistensi performa antara train dan test tanpa penurunan signifikan menandakan minimnya overfitting, sehingga model ini direkomendasikan sebagai solusi utama untuk prediksi anemia pediatrik.
+Proyek ini berhasil mengembangkan dan mengevaluasi model machine learning untuk prediksi dini anemia pada anak berdasarkan indikator hematologis, sebagai respons terhadap tingginya prevalensi anemia dan keterbatasan akses diagnosis di banyak wilayah. Melalui serangkaian tahapan mulai dari pemahaman data, persiapan data yang cermat (termasuk penanganan outlier dan seleksi fitur), hingga pemodelan komparatif menggunakan algoritma Logistic Regression, Gradient Boosting Classifier, dan SVM, ditemukan bahwa model Gradient Boosting Classifier menunjukkan performa superior. Model ini mencapai akurasi, presisi, recall, dan F1-score sempurna (100%) pada data uji, mengindikasikan kemampuannya untuk mengidentifikasi kasus anemia dengan sangat andal tanpa kesalahan prediksi dan potensi overfitting yang minimal. Keberhasilan ini menegaskan potensi besar machine learning dalam menyediakan alat bantu skrining anemia yang efektif, akurat, dan dapat diimplementasikan untuk mendukung deteksi dini serta intervensi yang lebih cepat, terutama di lingkungan dengan sumber daya terbatas, sehingga dapat berkontribusi pada peningkatan kesehatan anak.
 
 **Referensi:**
 
