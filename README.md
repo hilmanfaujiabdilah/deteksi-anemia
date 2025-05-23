@@ -72,26 +72,32 @@ Pemeriksaan awal terhadap kualitas data dilakukan untuk mengidentifikasi potensi
 1. Missing Values: Pemeriksaan menggunakan df.info() menunjukkan bahwa tidak terdapat nilai yang hilang (missing values) pada semua kolom dalam dataset. Setiap kolom memiliki 1000 entri non-null.
 2. Data Duplikat: Pemeriksaan menggunakan df.duplicated().sum() menunjukkan adanya data duplikat dalam dataset sebanyak 28 baris.
 3. Outlier (Observasi Awal):
+
    ![outlier](https://github.com/user-attachments/assets/62c35be7-5379-425b-85a2-68928e39c6b7)
    Visualisasi awal menggunakan boxplot untuk setiap fitur numerik mengindikasikan adanya beberapa titik data yang berpotensi menjadi outlier. Fitur seperti 'Age', 'Hb', 'RBC', 'PCV', 'MCV', 'MCH', dan 'MCHC' menunjukkan adanya nilai-nilai yang terletak jauh dari sebagian besar distribusi datanya. Penanganan lebih lanjut terhadap outlier ini akan dibahas pada tahap Data Preparation.
 
 ### Exploratory Data Analysis (EDA)
 Analisis data eksploratif dilakukan untuk lebih memahami karakteristik dan pola dalam data:
 1. Statistik Deskriptif
+
    ![image](https://github.com/user-attachments/assets/3938f955-155f-4b76-8836-21858b4b20bc)
    Menggunakan `df.describe()` untuk mendapatkan ringkasan statistik (seperti mean, median, standar deviasi, min, max, kuartil) untuk fitur numerik. memberikan gambaran mengenai sebaran dan tendensi sentral masing-masing fitur. Sebagai contoh, rentang usia pasien teridentifikasi antara 18 hingga 96 tahun.
-2. Analisis Univariat
+3. Analisis Univariat
    - Distribusi Fitur Numerik
+
      ![univar num](https://github.com/user-attachments/assets/88a98385-8fca-428a-9945-08ba8513279d)
      Observasi menunjukkan bahwa sebagian besar fitur hematologis seperti 'RBC', 'PCV', 'MCV', dan 'MCHC' memiliki distribusi yang mendekati normal, meskipun beberapa menunjukkan sedikit kemiringan (skewness). Fitur 'Age' menunjukkan distribusi yang lebih tersebar, sementara 'Hb' tampak sedikit miring ke kiri.
    - Distribusi Fitur Kategorikal
+
      ![univar gender](https://github.com/user-attachments/assets/c38f4c5f-3d27-495e-8f2a-829c9eb7c4ee)
      Observasi menunjukkan bahwa sebagian besar fitur hematologis seperti 'RBC', 'PCV', 'MCV', dan 'MCHC' memiliki distribusi yang mendekati normal, meskipun beberapa menunjukkan sedikit kemiringan (skewness). Fitur 'Age' menunjukkan distribusi yang lebih tersebar, sementara 'Hb' tampak sedikit miring ke kiri.
 4. Analisis Multivariat
    - Pairplot
+
      ![multi pair](https://github.com/user-attachments/assets/73b7a86d-f2a5-4b27-9eb7-c898091204d8)
      `sns.pairplot(df, diag_kind='kde')` digunakan untuk memvisualisasikan hubungan antar pasangan fitur numerik dan distribusi individual setiap fitur. Dari scatter plot, teridentifikasi adanya korelasi positif yang kuat antara beberapa pasang fitur hematologis, misalnya antara 'Hb' dengan 'RBC' dan 'PCV', serta antara 'RBC' dan 'PCV'. Korelasi yang sangat kuat juga terlihat antara 'MCV' dan 'MCH'.
    - Heatmap Korelasi
+
      ![image](https://github.com/user-attachments/assets/baaa6b90-7987-4abd-bb7f-e1d6b62b7a3e)
       Hasil heatmap mengonfirmasi korelasi tinggi (nilai mendekati +1) antara 'PCV' dan 'Hb', 'PCV' dan 'RBC', serta 'MCV' dan 'MCH'. Observasi ini menjadi dasar pertimbangan untuk tahap feature selection guna mengurangi multikolinearitas.
    
